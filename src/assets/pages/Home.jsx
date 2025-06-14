@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [activeTheme, setActiveTheme] = useState(false);
   const [input, setInput] = useState("");
-
   const [countryData, setCountryData] = useState([]);
+  const [query, setQuery] = useState("");
+  const [error, setError] = useState(null);
 
+  // initial data fetch
   useEffect(() => {
     async function fetchAllCountries() {
       try {
+        setError(null);
+
         const res = await fetch(
           "https://restcountries.com/v3.1/all?fields=name,flags,region,capital,population"
         );
@@ -16,33 +20,68 @@ export default function Home() {
           throw new Error("An error occured fetching the countries data");
 
         const data = await res.json();
-
         setCountryData(data);
-
-        console.log(data);
       } catch (err) {
-        console.log(err.message);
+        setError(err.message);
+        setCountryData([]);
       }
     }
 
     fetchAllCountries();
   }, []);
 
+  // fetch based on search Input
+  useEffect(() => {
+    if (query === "") return;
+
+    async function fetchByQuery() {
+      try {
+        setError(null);
+
+        const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
+        if (!res.ok) throw new Error("Country not found");
+
+        const data = await res.json();
+        setCountryData(data);
+      } catch (err) {
+        setError(err.message);
+        setCountryData([]);
+      }
+    }
+
+    fetchByQuery();
+  }, [query]);
+
   function handleThemeToggle() {
     setActiveTheme(!activeTheme);
   }
 
+  function handleSearch() {
+    setQuery(input.trim());
+    setInput("");
+  }
+
   return (
     <section
-      className={` w-svw flex flex-col gap-[2rem] ${
+      className={`w-svw flex flex-col gap-[2rem] ${
         !activeTheme ? "bg-very-dark-blue" : "bg-very-light-gray"
       } font-nunito ${
         !activeTheme ? "text-custom-white" : "text-very-dark-blue-x"
       }   text-[16px]`}
     >
       <Header active={activeTheme} onToggle={handleThemeToggle} />
-      <Body active={activeTheme} countries={countryData}>
-        <SearchBar active={activeTheme} input={input} setInput={setInput} />
+      <Body
+        active={activeTheme}
+        countries={countryData}
+        setError={setError}
+        setCountryData={setCountryData}
+      >
+        <SearchBar
+          active={activeTheme}
+          input={input}
+          setInput={setInput}
+          onSearch={handleSearch}
+        />
       </Body>
     </section>
   );
@@ -72,12 +111,16 @@ function Header({ onToggle, active }) {
   );
 }
 
-function Body({ children, active, countries }) {
+function Body({ children, active, countries, setError, setCountryData }) {
   return (
     <section className=" w-full flex flex-col items-center gap-[3rem] ">
       {children}
 
-      <FilterTab active={active} />
+      <FilterTab
+        active={active}
+        setError={setError}
+        setCountryData={setCountryData}
+      />
 
       <Countries>
         <Country active={active} countries={countries} />
@@ -86,16 +129,14 @@ function Body({ children, active, countries }) {
   );
 }
 
-function SearchBar({ active, input, setInput }) {
-  // const query = input;
-
+function SearchBar({ active, input, setInput, onSearch }) {
   return (
     <div
       className={`w-[90%] h-[80px] flex items-center gap-[1rem] px-[1.5rem] ${
         !active ? "bg-dark-blue" : "bg-custom-white"
       } text-[16px] rounded-[0.7rem] shadow-2xl `}
     >
-      <span className="cursor-pointer">
+      <span className="cursor-pointer" onClick={onSearch}>
         <ion-icon name="search"></ion-icon>
       </span>
 
@@ -112,14 +153,39 @@ function SearchBar({ active, input, setInput }) {
   );
 }
 
-function FilterTab({ active }) {
+function FilterTab({ active, setError, setCountryData }) {
   const [regionFilter, setRegionFilter] = useState("Filter by Region");
   const [isOpen, setIsOpen] = useState(false);
 
   const regions = ["Africa", "America", "Asia", "Europe", "Oceania"];
 
+  // fetch based on Region
+  useEffect(() => {
+    async function fetchByRegion() {
+      try {
+        setError(null);
+        const res = await fetch(
+          `https://restcountries.com/v3.1/region/${regionFilter}`
+        );
+        if (!res.ok) throw new Error("No country in this Region");
+
+        const data = await res.json();
+        setCountryData(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    fetchByRegion();
+  }, [regionFilter, setCountryData, setError]);
+
+  function handleFilterReset() {
+    setRegionFilter("Filter by Region");
+  }
+
   function handleFilterToggle() {
     setIsOpen(!isOpen);
+    handleFilterReset();
   }
 
   return (
@@ -166,7 +232,7 @@ function FilterTab({ active }) {
 
 function Countries({ children }) {
   return (
-    <section className="w-full grid grid-cols-1 items-center gap-[2rem] px-[2rem] md:grid-cols-3 md:grid-rows-auto xl:grid-cols-4 ">
+    <section className="w-full grid grid-cols-1 items-center gap-[2rem] px-[2rem] pb-[2rem] md:grid-cols-3 md:grid-rows-auto xl:grid-cols-4 ">
       {children}
     </section>
   );
@@ -185,7 +251,7 @@ function Country({ active, countries }) {
           <img
             src={country.flags.png}
             alt="country flag"
-            className="rounded-t-[0.4rem]"
+            className=" w-full rounded-t-[0.4rem]"
           />
 
           <div className="w-full flex flex-col gap-[0.6rem] font-[600] text-[16px] capitalize px-[2rem] pb-[3rem]">
@@ -203,7 +269,10 @@ function Country({ active, countries }) {
 
             <p>
               <span>capital: </span>
-              <span className="font-[300]"> {country.capital[0]} </span>
+              <span className="font-[300]">
+                {" "}
+                {country.capital?.[0] || "No Capital Available"}{" "}
+              </span>
             </p>
           </div>
         </div>

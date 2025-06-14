@@ -11,6 +11,8 @@ design
 INSTRUCTION.md
 style-guide.md
 
+src/data.json
+
 node_modules
 dist
 dist-ssr

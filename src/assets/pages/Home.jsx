@@ -1,8 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [activeTheme, setActiveTheme] = useState(false);
   const [input, setInput] = useState("");
+
+  const [countryData, setCountryData] = useState([]);
+
+  useEffect(() => {
+    async function fetchAllCountries() {
+      try {
+        const res = await fetch(
+          "https://restcountries.com/v3.1/all?fields=name,flags,region,capital,population"
+        );
+        if (!res.ok)
+          throw new Error("An error occured fetching the countries data");
+
+        const data = await res.json();
+
+        setCountryData(data);
+
+        console.log(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+
+    fetchAllCountries();
+  }, []);
 
   function handleThemeToggle() {
     setActiveTheme(!activeTheme);
@@ -10,14 +34,14 @@ export default function Home() {
 
   return (
     <section
-      className={` w-svw h-svh flex flex-col gap-[2rem] ${
+      className={` w-svw flex flex-col gap-[2rem] ${
         !activeTheme ? "bg-very-dark-blue" : "bg-very-light-gray"
       } font-nunito ${
         !activeTheme ? "text-custom-white" : "text-very-dark-blue-x"
       }   text-[16px]`}
     >
       <Header active={activeTheme} onToggle={handleThemeToggle} />
-      <Body active={activeTheme}>
+      <Body active={activeTheme} countries={countryData}>
         <SearchBar active={activeTheme} input={input} setInput={setInput} />
       </Body>
     </section>
@@ -48,12 +72,16 @@ function Header({ onToggle, active }) {
   );
 }
 
-function Body({ children, active }) {
+function Body({ children, active, countries }) {
   return (
     <section className=" w-full flex flex-col items-center gap-[3rem] ">
       {children}
 
       <FilterTab active={active} />
+
+      <Countries>
+        <Country active={active} countries={countries} />
+      </Countries>
     </section>
   );
 }
@@ -97,7 +125,7 @@ function FilterTab({ active }) {
   return (
     <section
       className={`w-full flex flex-col gap-[0.4rem] ps-[1.5rem] ${
-        isOpen ? "z-[99]" : ""
+        isOpen ? "z-[99] relative" : ""
       } `}
     >
       <div
@@ -133,5 +161,53 @@ function FilterTab({ active }) {
         </ul>
       )}
     </section>
+  );
+}
+
+function Countries({ children }) {
+  return (
+    <section className="w-full grid grid-cols-1 items-center gap-[2rem] px-[2rem] md:grid-cols-3 md:grid-rows-auto xl:grid-cols-4 ">
+      {children}
+    </section>
+  );
+}
+
+function Country({ active, countries }) {
+  return (
+    <>
+      {countries.map((country) => (
+        <div
+          key={country.name.common}
+          className={`w-full flex flex-col items-center gap-[2rem]  ${
+            !active ? "bg-dark-blue" : "bg-custom-white"
+          } shadow-2xl rounded-[0.4rem] md:w-[350px] xl:w-[400px] `}
+        >
+          <img
+            src={country.flags.png}
+            alt="country flag"
+            className="rounded-t-[0.4rem]"
+          />
+
+          <div className="w-full flex flex-col gap-[0.6rem] font-[600] text-[16px] capitalize px-[2rem] pb-[3rem]">
+            <p className=" font-[800] text-[18px]"> {country.name.common} </p>
+
+            <p className="pt-[1rem]">
+              <span>population: </span>
+              <span className="font-[300]"> {country.population}</span>
+            </p>
+
+            <p>
+              <span>region: </span>
+              <span className="font-[300]"> {country.region} </span>
+            </p>
+
+            <p>
+              <span>capital: </span>
+              <span className="font-[300]"> {country.capital[0]} </span>
+            </p>
+          </div>
+        </div>
+      ))}
+    </>
   );
 }

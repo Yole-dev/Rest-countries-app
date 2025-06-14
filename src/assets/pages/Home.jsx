@@ -50,14 +50,16 @@ function Header({ onToggle, active }) {
 
 function Body({ children, active }) {
   return (
-    <section className=" w-full flex flex-col items-center gap-[2rem]  ">
+    <section className=" w-full flex flex-col items-center gap-[3rem] ">
       {children}
+
+      <FilterTab active={active} />
     </section>
   );
 }
 
 function SearchBar({ active, input, setInput }) {
-  const query = input;
+  // const query = input;
 
   return (
     <div
@@ -65,7 +67,7 @@ function SearchBar({ active, input, setInput }) {
         !active ? "bg-dark-blue" : "bg-custom-white"
       } text-[16px] rounded-[0.7rem] shadow-2xl `}
     >
-      <span>
+      <span className="cursor-pointer">
         <ion-icon name="search"></ion-icon>
       </span>
 
@@ -79,5 +81,57 @@ function SearchBar({ active, input, setInput }) {
         onChange={(e) => setInput(e.target.value)}
       />
     </div>
+  );
+}
+
+function FilterTab({ active }) {
+  const [regionFilter, setRegionFilter] = useState("Filter by Region");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const regions = ["Africa", "America", "Asia", "Europe", "Oceania"];
+
+  function handleFilterToggle() {
+    setIsOpen(!isOpen);
+  }
+
+  return (
+    <section
+      className={`w-full flex flex-col gap-[0.4rem] ps-[1.5rem] ${
+        isOpen ? "z-[99]" : ""
+      } `}
+    >
+      <div
+        className={`w-[60%] h-[70px] flex items-center justify-between ${
+          !active ? "bg-dark-blue" : "bg-custom-white"
+        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl`}
+      >
+        <p> {regionFilter} </p>
+
+        <span
+          className=" flex flex-col items-center cursor-pointer "
+          onClick={handleFilterToggle}
+        >
+          {!isOpen ? (
+            <ion-icon name="chevron-down-outline"></ion-icon>
+          ) : (
+            <ion-icon name="chevron-up-outline"></ion-icon>
+          )}
+        </span>
+      </div>
+
+      {isOpen && (
+        <ul
+          className={`w-[60%] flex flex-col gap-[1rem] ps-[2rem] py-[2rem] ${
+            !active ? "bg-dark-blue" : "bg-custom-white"
+          } text-[16px] rounded-[0.5rem] shadow-2xl `}
+        >
+          {regions.map((region, i) => (
+            <li key={i} onClick={(e) => setRegionFilter(e.target.innerHTML)}>
+              {region}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

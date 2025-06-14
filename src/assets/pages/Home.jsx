@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [activeTheme, setActiveTheme] = useState(false);
+  const [input, setInput] = useState("");
 
   function handleThemeToggle() {
     setActiveTheme(!activeTheme);
@@ -16,7 +17,9 @@ export default function Home() {
       }   text-[16px]`}
     >
       <Header active={activeTheme} onToggle={handleThemeToggle} />
-      <Body active={activeTheme} />
+      <Body active={activeTheme}>
+        <SearchBar active={activeTheme} input={input} setInput={setInput} />
+      </Body>
     </section>
   );
 }
@@ -45,8 +48,36 @@ function Header({ onToggle, active }) {
   );
 }
 
-function Body() {
+function Body({ children, active }) {
   return (
-    <section className=" w-full flex flex-col gap-[2rem] pt-[3rem] "></section>
+    <section className=" w-full flex flex-col items-center gap-[2rem]  ">
+      {children}
+    </section>
+  );
+}
+
+function SearchBar({ active, input, setInput }) {
+  const query = input;
+
+  return (
+    <div
+      className={`w-[90%] h-[80px] flex items-center gap-[1rem] px-[1.5rem] ${
+        !active ? "bg-dark-blue" : "bg-custom-white"
+      } text-[16px] rounded-[0.7rem] shadow-2xl `}
+    >
+      <span>
+        <ion-icon name="search"></ion-icon>
+      </span>
+
+      <input
+        type="text"
+        placeholder="Search for a country..."
+        className={` font-[500] ${
+          !active ? " text-custom-white" : "text-dark-gray"
+        } focus:outline-none`}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+    </div>
   );
 }

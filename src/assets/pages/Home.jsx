@@ -4,7 +4,7 @@ export default function Home() {
   const [activeTheme, setActiveTheme] = useState(false);
 
   function handleThemeToggle() {
-    setActiveTheme(() => !activeTheme);
+    setActiveTheme(!activeTheme);
   }
 
   return (
@@ -35,7 +35,7 @@ function Header({ onToggle, active }) {
           {!active ? (
             <ion-icon name="moon-sharp"></ion-icon>
           ) : (
-            <ion-icon name="sunny-sharp"></ion-icon>
+            <ion-icon name="sunny"></ion-icon>
           )}
         </span>
 

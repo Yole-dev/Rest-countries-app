@@ -259,7 +259,10 @@ function Country({ active, countries }) {
 
             <p className="pt-[1rem]">
               <span>population: </span>
-              <span className="font-[300]"> {country.population}</span>
+              <span className="font-[300]">
+                {" "}
+                {country.population.toLocaleString()}
+              </span>
             </p>
 
             <p>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 // imported component
 import LoadingCircleSpinner from "../../components/loader";
 
-export default function Home({ activeTheme }) {
+export default function Home({ activeTheme, setCountry }) {
   const [input, setInput] = useState("");
   const [countryData, setCountryData] = useState([]);
   const [query, setQuery] = useState("");
@@ -77,6 +78,7 @@ export default function Home({ activeTheme }) {
         error={error}
         setCountryData={setCountryData}
         setIsLoading={setIsLoading}
+        setCountry={setCountry}
         loading={isLoading}
       >
         <SearchBar
@@ -98,6 +100,7 @@ function Body({
   error,
   setCountryData,
   setIsLoading,
+  setCountry,
   loading,
 }) {
   return (
@@ -114,7 +117,11 @@ function Body({
       </div>
 
       <Countries loading={loading} error={error} active={active}>
-        <Country active={active} countries={countries} />
+        <Country
+          active={active}
+          countries={countries}
+          setCountry={setCountry}
+        />
       </Countries>
     </section>
   );
@@ -250,7 +257,7 @@ function Countries({ children, loading, error, active }) {
   );
 }
 
-function Country({ active, countries }) {
+function Country({ active, countries, setCountry }) {
   return (
     <>
       {countries.map((country) => (
@@ -267,7 +274,15 @@ function Country({ active, countries }) {
           />
 
           <div className="w-full flex flex-col gap-[0.6rem] font-[600] text-[16px] capitalize px-[2rem] pb-[3rem]">
-            <p className=" font-[800] text-[18px]"> {country.name.common} </p>
+            <Link to="/country-detail">
+              <p
+                className=" font-[800] text-[18px]"
+                onClick={(e) => setCountry(e.target.innerHTML)}
+              >
+                {" "}
+                {country.name.common}{" "}
+              </p>
+            </Link>
 
             <p className="pt-[1rem]">
               <span>population: </span>

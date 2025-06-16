@@ -7,6 +7,7 @@ import CountryDetail from "./assets/pages/Details";
 
 export default function App() {
   const [activeTheme, setActiveTheme] = useState(false);
+  const [country, setCountry] = useState("");
 
   return (
     <Router>
@@ -15,7 +16,7 @@ export default function App() {
           path="/"
           element={
             <Layout activeTheme={activeTheme} setActiveTheme={setActiveTheme}>
-              <Home activeTheme={activeTheme} />
+              <Home activeTheme={activeTheme} setCountry={setCountry} />
             </Layout>
           }
         />
@@ -24,7 +25,11 @@ export default function App() {
           path="/country-detail"
           element={
             <Layout activeTheme={activeTheme} setActiveTheme={setActiveTheme}>
-              <CountryDetail activeTheme={activeTheme} />
+              <CountryDetail
+                activeTheme={activeTheme}
+                country={country}
+                setCountry={setCountry}
+              />
             </Layout>
           }
         />

@@ -47,11 +47,9 @@ export default function Home() {
         setError(null);
 
         const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
-        if (!res.ok) throw new Error("Country not found.");
+        if (!res.ok) throw new Error("Country doesn't exist.");
 
         const data = await res.json();
-        if (!data) throw new Error("Country doesn't exist.");
-
         setCountryData(data);
       } catch (err) {
         setError(err.message);
@@ -186,6 +184,8 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
 
   // fetch based on Region
   useEffect(() => {
+    if (regionFilter === "Filter by Region") return;
+
     async function fetchByRegion() {
       setIsLoading(true);
       try {

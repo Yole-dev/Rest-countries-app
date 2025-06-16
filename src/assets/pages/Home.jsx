@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 // imported component
 import LoadingCircleSpinner from "../../components/loader";
 
-export default function Home() {
-  const [activeTheme, setActiveTheme] = useState(false);
+export default function Home({ activeTheme }) {
   const [input, setInput] = useState("");
   const [countryData, setCountryData] = useState([]);
   const [query, setQuery] = useState("");
@@ -62,10 +61,6 @@ export default function Home() {
     fetchByQuery();
   }, [query]);
 
-  function handleThemeToggle() {
-    setActiveTheme(!activeTheme);
-  }
-
   function handleSearch() {
     setQuery(input.trim());
     setInput("");
@@ -73,13 +68,8 @@ export default function Home() {
 
   return (
     <section
-      className={`w-svw flex flex-col gap-[2rem] ${
-        !activeTheme ? "bg-very-dark-blue" : "bg-very-light-gray"
-      } font-nunito ${
-        !activeTheme ? "text-custom-white" : "text-very-dark-blue-x"
-      }   text-[16px]`}
+      className={`w-svw flex flex-col items-center gap-[2rem] text-[16px] md:w-full `}
     >
-      <Header active={activeTheme} onToggle={handleThemeToggle} />
       <Body
         active={activeTheme}
         countries={countryData}
@@ -100,30 +90,6 @@ export default function Home() {
   );
 }
 
-function Header({ onToggle, active }) {
-  return (
-    <section
-      className={` w-full h-[100px] flex justify-between items-center px-[1rem] ${
-        !active ? "bg-dark-blue" : "bg-custom-white"
-      } `}
-    >
-      <p className="text-[18px] font-[800] ">Where in the world?</p>
-
-      <div className="flex items-center gap-[0.5rem]" onClick={onToggle}>
-        <span>
-          {!active ? (
-            <ion-icon name="moon-sharp"></ion-icon>
-          ) : (
-            <ion-icon name="sunny"></ion-icon>
-          )}
-        </span>
-
-        <p className="font-[500]"> {!active ? "Dark Mode" : "Light Mode"} </p>
-      </div>
-    </section>
-  );
-}
-
 function Body({
   children,
   active,
@@ -135,15 +101,17 @@ function Body({
   loading,
 }) {
   return (
-    <section className=" w-full flex flex-col items-center gap-[3rem] ">
-      {children}
+    <section className=" self-center w-[95%] flex flex-col items-center gap-[3rem] ">
+      <div className=" w-full flex flex-col items-start gap-[2rem] px-[1.5rem] md:px-0 xl:flex-row xl:justify-between xl:items-center  ">
+        {children}
 
-      <FilterTab
-        active={active}
-        setError={setError}
-        setCountryData={setCountryData}
-        setIsLoading={setIsLoading}
-      />
+        <FilterTab
+          active={active}
+          setError={setError}
+          setCountryData={setCountryData}
+          setIsLoading={setIsLoading}
+        />
+      </div>
 
       <Countries loading={loading} error={error} active={active}>
         <Country active={active} countries={countries} />
@@ -155,11 +123,14 @@ function Body({
 function SearchBar({ active, input, setInput, onSearch }) {
   return (
     <div
-      className={`w-[90%] h-[80px] flex items-center gap-[1rem] px-[1.5rem] ${
+      className={` w-[95%] h-[80px] self-center flex items-center gap-[1rem] px-[1.5rem] ${
         !active ? "bg-dark-blue" : "bg-custom-white"
-      } text-[16px] rounded-[0.7rem] shadow-2xl `}
+      } text-[16px] rounded-[0.7rem] shadow-2xl md:w-[60%] md:self-start xl:w-[50%] xl:h-[70px] `}
     >
-      <span className="cursor-pointer" onClick={onSearch}>
+      <span
+        className="cursor-pointer hover:text-dark-gray transition duration-300 ease-in-out "
+        onClick={onSearch}
+      >
         <ion-icon name="search"></ion-icon>
       </span>
 
@@ -213,14 +184,14 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
 
   return (
     <section
-      className={`w-full flex flex-col gap-[0.4rem] ps-[1.5rem] ${
+      className={`w-full flex flex-col gap-[0.4rem] ${
         isOpen ? "z-[99] relative" : ""
-      } `}
+      } xl:items-end `}
     >
       <div
         className={`w-[60%] h-[70px] flex items-center justify-between ${
           !active ? "bg-dark-blue" : "bg-custom-white"
-        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl`}
+        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl md:w-[30%]`}
       >
         <p> {regionFilter} </p>
 
@@ -240,13 +211,13 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
         <ul
           className={`w-[60%] flex flex-col gap-[1rem] ps-[2rem] py-[2rem] ${
             !active ? "bg-dark-blue" : "bg-custom-white"
-          } text-[16px] rounded-[0.5rem] shadow-2xl `}
+          } text-[16px] rounded-[0.5rem] shadow-2xl md:w-[30%] `}
         >
           {regions.map((region, i) => (
             <li
               key={i}
               onClick={(e) => setRegionFilter(e.target.innerHTML)}
-              className="cursor-pointer"
+              className="cursor-pointer hover:text-dark-gray transition duration-300 ease-in-out "
             >
               {region}
             </li>
@@ -259,11 +230,13 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
 
 function Countries({ children, loading, error, active }) {
   return (
-    <section className="w-full min-h-[60svh] grid grid-cols-1 justify-center gap-[2rem] px-[2rem] pb-[2rem] md:grid-cols-3 md:grid-rows-auto xl:grid-cols-4 ">
+    <section className="w-full min-h-[60svh] grid grid-cols-1 justify-center gap-[2rem] px-[2rem] pb-[2rem] md:grid-cols-3  md:grid-rows-auto md:px-0 xl:grid-cols-4 ">
       {loading && (
-        <LoadingCircleSpinner
-          borderColor={`${active ? "hsl(209, 23%, 22%)" : "hsl(0, 0%, 98%)"}`}
-        />
+        <div className="col-span-full flex items-center justify-center">
+          <LoadingCircleSpinner
+            borderColor={`${active ? "hsl(209, 23%, 22%)" : "hsl(0, 0%, 98%)"}`}
+          />
+        </div>
       )}
 
       {error && !loading && (

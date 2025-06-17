@@ -22,7 +22,9 @@ function Header({ onToggle, active }) {
     <section
       className={` w-full h-[100px] flex justify-between items-center px-[1rem] ${
         !active ? "bg-dark-blue" : "bg-custom-white"
-      } xl:px-[4rem] `}
+      } shadow-2xl ${
+        !active ? "shadow-very-dark-blue-x" : "shadow-dark-blue"
+      }  xl:px-[4rem] `}
     >
       <p className="text-[18px] font-[800] xl:text-[20px] ">
         Where in the world?

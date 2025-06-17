@@ -6,6 +6,7 @@ import { CountryContext } from "../hooks/CountryNameContext";
 
 // imported component
 import LoadingCircleSpinner from "../../components/loader";
+import Page from "../../components/PageEntryAnimation";
 
 export default function CountryDetail({ activeTheme }) {
   const [countryDetail, setCountryDetail] = useState(null);
@@ -76,7 +77,7 @@ export default function CountryDetail({ activeTheme }) {
   }, [countryCode]);
 
   return (
-    <section className=" w-full flex flex-col px-[1.5rem] pb-[2rem] gap-[3rem] xl:gap-[4rem] xl:px-[4rem]">
+    <Page className=" w-full flex flex-col px-[1.5rem] pb-[2rem] gap-[3rem] xl:gap-[4rem] xl:px-[4rem]">
       <Link to="/">
         <button
           className={`flex gap-2 items-center justify-center font-[300] text-[16px] px-[2rem] py-[0.4rem] shadow-2xl shadow-dark-blue hover:shadow-very-dark-blue-x focus:outline-none ${
@@ -118,7 +119,7 @@ export default function CountryDetail({ activeTheme }) {
           active={activeTheme}
         />
       )}
-    </section>
+    </Page>
   );
 }
 

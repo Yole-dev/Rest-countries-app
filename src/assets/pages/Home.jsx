@@ -6,6 +6,7 @@ import { CountryContext } from "../hooks/CountryNameContext";
 
 // imported component
 import LoadingCircleSpinner from "../../components/loader";
+import Page from "../../components/PageEntryAnimation";
 
 export default function Home({ activeTheme }) {
   const [input, setInput] = useState("");
@@ -71,7 +72,7 @@ export default function Home({ activeTheme }) {
   }
 
   return (
-    <section
+    <Page
       className={`w-svw flex flex-col items-center gap-[2rem] text-[16px] md:w-full `}
     >
       <Body
@@ -90,7 +91,7 @@ export default function Home({ activeTheme }) {
           onSearch={handleSearch}
         />
       </Body>
-    </section>
+    </Page>
   );
 }
 

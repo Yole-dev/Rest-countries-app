@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+// imported custom hook
+import { CountryContext } from "../hooks/CountryNameContext";
 
 // imported component
 import LoadingCircleSpinner from "../../components/loader";
 
-export default function Home({ activeTheme, setCountry }) {
+export default function Home({ activeTheme }) {
   const [input, setInput] = useState("");
   const [countryData, setCountryData] = useState([]);
   const [query, setQuery] = useState("");
@@ -78,7 +81,6 @@ export default function Home({ activeTheme, setCountry }) {
         error={error}
         setCountryData={setCountryData}
         setIsLoading={setIsLoading}
-        setCountry={setCountry}
         loading={isLoading}
       >
         <SearchBar
@@ -100,7 +102,6 @@ function Body({
   error,
   setCountryData,
   setIsLoading,
-  setCountry,
   loading,
 }) {
   return (
@@ -117,11 +118,7 @@ function Body({
       </div>
 
       <Countries loading={loading} error={error} active={active}>
-        <Country
-          active={active}
-          countries={countries}
-          setCountry={setCountry}
-        />
+        <Country active={active} countries={countries} />
       </Countries>
     </section>
   );
@@ -257,7 +254,8 @@ function Countries({ children, loading, error, active }) {
   );
 }
 
-function Country({ active, countries, setCountry }) {
+function Country({ active, countries }) {
+  const { setCountry } = useContext(CountryContext);
   return (
     <>
       {countries.map((country) => (
@@ -269,19 +267,16 @@ function Country({ active, countries, setCountry }) {
         >
           <img
             src={country.flags.png}
-            alt="country flag"
+            alt={country.flags.alt}
             className=" w-full rounded-t-[0.4rem] h-[210px] md:h-[146.44px] xl:h-[199.69px] "
           />
 
           <div className="w-full flex flex-col gap-[0.6rem] font-[600] text-[16px] capitalize px-[2rem] pb-[3rem]">
-            <Link to="/country-detail">
-              <p
-                className=" font-[800] text-[18px]"
-                onClick={(e) => setCountry(e.target.innerHTML)}
-              >
-                {" "}
-                {country.name.common}{" "}
-              </p>
+            <Link
+              to="/country-detail"
+              onClick={() => setCountry(country.name.common)}
+            >
+              <p className=" font-[800] text-[18px]"> {country.name.common} </p>
             </Link>
 
             <p className="pt-[1rem]">

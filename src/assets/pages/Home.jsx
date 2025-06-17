@@ -129,7 +129,11 @@ function SearchBar({ active, input, setInput, onSearch }) {
     <div
       className={` w-[95%] h-[80px] self-center flex items-center gap-[1rem] px-[1.5rem] ${
         !active ? "bg-dark-blue" : "bg-custom-white"
-      } text-[16px] rounded-[0.7rem] shadow-2xl md:w-[60%] md:self-start xl:w-[50%] xl:h-[70px] `}
+      } text-[16px] rounded-[0.7rem] shadow-2xl  ${
+        !active
+          ? " shadow-very-dark-blue-x hover:shadow-xs hover:shadow-dark-gray "
+          : "shadow-dark-gray hover:shadow-very-dark-blue-x"
+      } md:w-[60%] md:self-start xl:w-[50%] xl:h-[70px] transition duration-300 ease-in-out `}
     >
       <span
         className="cursor-pointer hover:text-dark-gray transition duration-300 ease-in-out "
@@ -143,7 +147,7 @@ function SearchBar({ active, input, setInput, onSearch }) {
         placeholder="Search for a country..."
         className={` font-[500] ${
           !active ? " text-custom-white" : "text-dark-gray"
-        } focus:outline-none`}
+        } focus:outline-none  `}
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
@@ -195,7 +199,11 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
       <div
         className={`w-[60%] h-[70px] flex items-center justify-between ${
           !active ? "bg-dark-blue" : "bg-custom-white"
-        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl md:w-[30%]`}
+        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl ${
+          !active
+            ? " shadow-very-dark-blue-x hover:shadow-xs hover:shadow-dark-gray "
+            : "shadow-dark-gray hover:shadow-very-dark-blue-x"
+        } transition duration-300 ease-in-out md:w-[30%]`}
       >
         <p> {regionFilter} </p>
 
@@ -215,7 +223,11 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
         <ul
           className={`w-[60%] flex flex-col gap-[1rem] ps-[2rem] py-[2rem] ${
             !active ? "bg-dark-blue" : "bg-custom-white"
-          } text-[16px] rounded-[0.5rem] shadow-2xl md:w-[30%] `}
+          } text-[16px] rounded-[0.5rem] shadow-2xl ${
+            !active
+              ? " shadow-very-dark-blue-x hover:shadow-2xs hover:shadow-dark-gray "
+              : "shadow-dark-gray hover:shadow-very-dark-blue-x"
+          } md:w-[30%] transition duration-300 ease-in-out `}
         >
           {regions.map((region, i) => (
             <li
@@ -256,6 +268,7 @@ function Countries({ children, loading, error, active }) {
 
 function Country({ active, countries }) {
   const { setCountry } = useContext(CountryContext);
+
   return (
     <>
       {countries.map((country) => (
@@ -263,7 +276,11 @@ function Country({ active, countries }) {
           key={country.name.common}
           className={`w-full flex flex-col items-center gap-[2rem]  ${
             !active ? "bg-dark-blue" : "bg-custom-white"
-          } shadow-2xl rounded-[0.4rem] md:w-[220px] xl:w-[300px] `}
+          } shadow-2xl ${
+            !active
+              ? "shadow-very-dark-blue-x hover:shadow-dark-gray "
+              : "shadow-dark-gray hover:shadow-very-dark-blue-x"
+          }   rounded-[0.4rem] md:w-[220px] xl:w-[300px] transition duration-300 ease-in-out`}
         >
           <img
             src={country.flags.png}
@@ -271,12 +288,18 @@ function Country({ active, countries }) {
             className=" w-full rounded-t-[0.4rem] h-[210px] md:h-[146.44px] xl:h-[199.69px] "
           />
 
-          <div className="w-full flex flex-col gap-[0.6rem] font-[600] text-[16px] capitalize px-[2rem] pb-[3rem]">
+          <div className="w-full flex flex-col gap-[0.6rem] font-[600] text-[16px] capitalize px-[2rem] pb-[3rem] xl:text-[18px] ">
             <Link
               to="/country-detail"
-              onClick={() => setCountry(country.name.common)}
+              onClick={() => {
+                setCountry(country.name.common);
+                window.scrollTo(0, 0);
+              }}
             >
-              <p className=" font-[800] text-[18px]"> {country.name.common} </p>
+              <p className=" font-[800] text-[18px] hover:text-dark-gray xl:text-[20px] transition duration-300 ease-in-out">
+                {" "}
+                {country.name.common}{" "}
+              </p>
             </Link>
 
             <p className="pt-[1rem]">

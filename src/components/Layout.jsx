@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function Layout({ children, activeTheme, setActiveTheme }) {
   function handleThemeToggle() {
     setActiveTheme(!activeTheme);
@@ -26,10 +24,12 @@ function Header({ onToggle, active }) {
         !active ? "bg-dark-blue" : "bg-custom-white"
       } xl:px-[4rem] `}
     >
-      <p className="text-[18px] font-[800] ">Where in the world?</p>
+      <p className="text-[18px] font-[800] xl:text-[20px] ">
+        Where in the world?
+      </p>
 
       <div
-        className="flex items-center gap-[0.5rem] hover:text-dark-gray transition duration-300 ease-in-out cursor-pointer "
+        className="flex items-center gap-[0.5rem] text-[16px] hover:text-dark-gray transition duration-300 ease-in-out cursor-pointer xl:text-[18px] "
         onClick={onToggle}
       >
         <span>

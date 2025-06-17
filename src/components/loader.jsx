@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 
 export default function LoadingCircleSpinner({
   borderColor = "hsl(0, 0%, 98%)",
+  className = "container",
 }) {
   return (
-    <div className="container">
+    <div className={className}>
       <motion.div
         className="spinner"
         animate={{ rotate: 360 }}

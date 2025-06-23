@@ -131,7 +131,7 @@ function SearchBar({ active, input, setInput, onSearch }) {
     <div
       className={` w-full h-[80px] self-center flex items-center gap-[1rem] px-[1.5rem] ${
         !active ? "bg-dark-blue" : "bg-custom-white"
-      } text-[16px] rounded-[0.7rem] shadow-2xl  ${
+      } text-[16px] rounded-[0.7rem] shadow-2xl/50  ${
         !active
           ? " shadow-very-dark-blue-x hover:shadow-xs hover:shadow-dark-gray "
           : "shadow-dark-gray hover:shadow-very-dark-blue-x"
@@ -201,7 +201,7 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
       <div
         className={`w-[60%] h-[70px] flex items-center justify-between ${
           !active ? "bg-dark-blue" : "bg-custom-white"
-        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl ${
+        } text-[16px] rounded-[0.5rem] px-[2rem] shadow-2xl/50 ${
           !active
             ? " shadow-very-dark-blue-x hover:shadow-xs hover:shadow-dark-gray "
             : "shadow-dark-gray hover:shadow-very-dark-blue-x"
@@ -225,7 +225,7 @@ function FilterTab({ active, setError, setCountryData, setIsLoading }) {
         <ul
           className={`w-[60%] flex flex-col gap-[1rem] ps-[2rem] py-[2rem] ${
             !active ? "bg-dark-blue" : "bg-custom-white"
-          } text-[16px] rounded-[0.5rem] shadow-2xl ${
+          } text-[16px] rounded-[0.5rem] shadow-2xl/50 ${
             !active
               ? " shadow-very-dark-blue-x hover:shadow-2xs hover:shadow-dark-gray "
               : "shadow-dark-gray hover:shadow-very-dark-blue-x"
@@ -278,7 +278,7 @@ function Country({ active, countries }) {
           key={country.name.common}
           className={`w-full flex flex-col items-center gap-[2rem]  ${
             !active ? "bg-dark-blue" : "bg-custom-white"
-          } shadow-2xl ${
+          } shadow-2xl/50 ${
             !active
               ? "shadow-very-dark-blue-x hover:shadow-dark-gray "
               : "shadow-dark-gray hover:shadow-very-dark-blue-x"

@@ -7,6 +7,7 @@ import { CountryContext } from "../hooks/CountryNameContext";
 // imported component
 import LoadingCircleSpinner from "../../components/loader";
 import Page from "../../components/PageEntryAnimation";
+import AnimatedContainer from "../../components/ComponentEntryAnimation";
 
 export default function Home({ activeTheme }) {
   const [input, setInput] = useState("");
@@ -128,7 +129,7 @@ function Body({
 function SearchBar({ active, input, setInput, onSearch }) {
   return (
     <div
-      className={` w-[95%] h-[80px] self-center flex items-center gap-[1rem] px-[1.5rem] ${
+      className={` w-full h-[80px] self-center flex items-center gap-[1rem] px-[1.5rem] ${
         !active ? "bg-dark-blue" : "bg-custom-white"
       } text-[16px] rounded-[0.7rem] shadow-2xl  ${
         !active

@@ -62,6 +62,7 @@ export default function CountryDetail({ activeTheme }) {
 
         const data = await res.json();
         setCountryDetail(data[0]);
+        setCountry(data[0].name.common);
         document.title = `${data[0].name.common} Details`;
 
         console.log(data[0]);
@@ -74,7 +75,7 @@ export default function CountryDetail({ activeTheme }) {
     }
 
     fetchByCodeQuery();
-  }, [countryCode]);
+  }, [countryCode, setCountry]);
 
   return (
     <Page className=" w-full flex flex-col px-[1.5rem] pb-[2rem] gap-[3rem] xl:gap-[4rem] xl:px-[4rem]">

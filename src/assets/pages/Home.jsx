@@ -274,7 +274,7 @@ function Country({ active, countries }) {
   return (
     <>
       {countries.map((country) => (
-        <div
+        <AnimatedContainer
           key={country.name.common}
           className={`w-full flex flex-col items-center gap-[2rem]  ${
             !active ? "bg-dark-blue" : "bg-custom-white"
@@ -325,7 +325,7 @@ function Country({ active, countries }) {
               </span>
             </p>
           </div>
-        </div>
+        </AnimatedContainer>
       ))}
     </>
   );

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-function AnimatedContainer({ children, className = "" }) {
+export default function AnimatedContainer({ children, className = "" }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
